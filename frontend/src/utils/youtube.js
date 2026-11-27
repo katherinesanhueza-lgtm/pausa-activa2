@@ -44,6 +44,13 @@ export function esEnlaceYoutube(enlace) {
   return obtenerIdYoutube(enlace) !== null
 }
 
+// Formato único para guardar en la base de datos, sin parámetros extra (?si=, &list=, &t=).
+// El segundo de inicio se guarda aparte, en segundo_inicio.
+export function enlaceNormalizado(enlace) {
+  const id = obtenerIdYoutube(enlace)
+  return id ? `https://www.youtube.com/watch?v=${id}` : null
+}
+
 // Miniatura que YouTube genera para cada video; se usa en las listas (RNF-04).
 export function urlMiniatura(id, calidad = 'hqdefault') {
   if (!ID_VALIDO.test(id ?? '')) return null

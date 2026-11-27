@@ -2,7 +2,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import {
-  obtenerIdYoutube, esEnlaceYoutube, urlMiniatura, urlIncrustada,
+  obtenerIdYoutube, esEnlaceYoutube, enlaceNormalizado, urlMiniatura, urlIncrustada,
   segundoDelEnlace, validarTramo, duracionDelTramo, formatearSegundos,
 } from './youtube.js'
 
@@ -43,6 +43,14 @@ test('rechaza enlaces que no son videos de YouTube', () => {
   for (const enlace of enlaces) assert.equal(obtenerIdYoutube(enlace), null, String(enlace))
   assert.equal(esEnlaceYoutube('https://vimeo.com/1'), false)
   assert.equal(esEnlaceYoutube(`https://youtu.be/${ID}`), true)
+})
+
+test('guarda el enlace siempre con el mismo formato', () => {
+  const canonico = `https://www.youtube.com/watch?v=${ID}`
+  assert.equal(enlaceNormalizado(`https://youtu.be/${ID}?si=compartido&t=30`), canonico)
+  assert.equal(enlaceNormalizado(`https://www.youtube.com/shorts/${ID}`), canonico)
+  assert.equal(enlaceNormalizado(`m.youtube.com/watch?v=${ID}&list=PL1`), canonico)
+  assert.equal(enlaceNormalizado('https://vimeo.com/1'), null)
 })
 
 test('arma la miniatura del video', () => {
